@@ -41,6 +41,13 @@
 		if (startMenu && startMenu.style.display === 'block' && !startMenu.contains(e.target) && e.target !== startBtn) {
 			startMenu.style.display = 'none';
 		}
+		if (taskbarNav && taskbarNav.classList.contains('open') && !taskbarNav.contains(e.target) && e.target !== hamburgerBtn) {
+			taskbarNav.classList.remove('open');
+			if (hamburgerBtn) {
+				hamburgerBtn.classList.remove('open');
+				hamburgerBtn.setAttribute('aria-expanded', 'false');
+			}
+		}
 	});
 
 	function goToWindow(id) {
@@ -64,8 +71,26 @@
 			if (target && target.charAt(0) === '#') {
 				goToWindow(target.substring(1));
 			}
+			if (hamburgerBtn && taskbarNav) {
+				hamburgerBtn.classList.remove('open');
+				hamburgerBtn.setAttribute('aria-expanded', 'false');
+				taskbarNav.classList.remove('open');
+			}
 		});
 	});
+
+	// MENU HAMBÚRGUER MOBILE
+	var hamburgerBtn = document.getElementById('hamburgerBtn');
+	var taskbarNav = document.getElementById('taskbarNav');
+
+	if (hamburgerBtn && taskbarNav) {
+		hamburgerBtn.addEventListener('click', function(e) {
+			e.stopPropagation();
+			var isOpen = taskbarNav.classList.toggle('open');
+			this.classList.toggle('open', isOpen);
+			this.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+		});
+	}
 })();
 
 // PLAYER DE MÚSICA RETRO - AUDIO HTML5
@@ -84,6 +109,12 @@
 			src: "musicas/from-the-start.mp3"
 		},
 		{
+			artist: "Laufey",
+			title: "Promise",
+			cover: "https://images.genius.com/a4a62b88f0717a4eb2d7201eb05f4b33.300x300x1.png",
+			src: "musicas/promise.mp3"
+		},
+		{
 			artist: "Jão",
 			title: "Idiota",
 			cover: "https://i.scdn.co/image/ab67616d0000b27376086200d394250d6eef8adf",
@@ -91,21 +122,9 @@
 		},
 		{
 			artist: "Jão",
-			title: "Alinhamento Milenar",
-			cover: "https://i.scdn.co/image/ab67616d0000b27376086200d394250d6eef8adf",
-			src: "musicas/alinhamento-milenar.mp3"
-		},
-		{
-			artist: "Jão",
-			title: "Meninos e Meninas",
-			cover: "https://i.scdn.co/image/ab67616d0000b27376086200d394250d6eef8adf",
-			src: "musicas/meninos-e-meninas.mp3"
-		},
-		{
-			artist: "Jão",
-			title: "Me Lambe",
-			cover: "https://i.scdn.co/image/ab67616d0000b27376086200d394250d6eef8adf",
-			src: "musicas/me-lambe.mp3"
+			title: "Aurora",
+			cover: "https://akamai.sscdn.co/uploadfile/letras/albuns/3/b/7/4/5057081785149299.jpg",
+			src: "musicas/aurora.mp3"
 		},
 		{
 			artist: "2ZDinizz",
