@@ -3,10 +3,12 @@
 }
 
 body {
-	background-image: url('https://parade.com/.image/t_share/MTkwNTgxNDY5NjYzNjAyNTU2/funny-birthday-memes-jpg.jpg');
+	background-image: url('https://i.pinimg.com/1200x/59/9f/9f/599f9f55d0b8063264261cccbe0b2439.jpg');
 	background-repeat: no-repeat;
 	background-attachment: fixed;
-	background-size: cover;
+	background-position: center center;
+	background-size: 100% auto;
+	background-color: #3a2b0f;
 	margin: 0;
 	padding: 20px 10px 60px 10px;
 	font-family: "MS Sans Serif", Tahoma, Arial, sans-serif;
@@ -349,6 +351,22 @@ tbody td img {
 	object-fit: cover;
 	border: 1px inset #808080;
 	display: block;
+}
+
+tbody td img.guest-img-clickable {
+	cursor: pointer;
+	transition: transform 0.2s ease;
+}
+
+tbody td img.guest-img-clickable:hover,
+tbody td img.guest-img-clickable.clicked {
+	box-shadow: 0 0 0 3px #5e0090;
+}
+
+.guest-img-clickable.gif-playing {
+	width: 90px;
+	height: 90px;
+	object-fit: cover;
 }
 
 /* MENSAGENS ANÔNIMAS */

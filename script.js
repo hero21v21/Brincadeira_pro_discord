@@ -112,6 +112,12 @@
 			title: "Pensando em Mim",
 			cover: "https://i.scdn.co/image/ab67616d0000b273800ebc6f7b457f363809be8e",
 			src: "musicas/pensando-em-mim.mp3"
+		},
+		{
+			artist: "Cafuné",
+			title: "Tek It",
+			cover: "https://cdn-images.dzcdn.net/images/cover/6414570db8287addf610c8ab5aad638b/0x1900-000000-80-0-0.jpg",
+			src: "musicas/tek-it.mp3"
 		}
 	];
 
@@ -505,4 +511,39 @@
 		saveMessage(text, time);
 		input.value = '';
 	});
+})();
+
+// GIF + ÁUDIO DO LINDOLFO
+(function() {
+	var img = document.getElementById('lindolfoGif');
+	if (!img) return;
+
+	var originalSrc = img.getAttribute('src');
+	var gifSrc = 'https://media.tenor.com/CgNrHQMSwOIAAAAM/green-alien-cat.gif';
+	var audio = new Audio('musicas/lindolfo.mp3');
+	var active = false;
+
+	function stopGif() {
+		active = false;
+		img.src = originalSrc;
+		img.classList.remove('clicked', 'gif-playing');
+		audio.pause();
+		audio.currentTime = 0;
+	}
+
+	img.addEventListener('click', function() {
+		if (active) {
+			stopGif();
+			return;
+		}
+		active = true;
+		img.src = gifSrc;
+		img.classList.add('clicked', 'gif-playing');
+		audio.currentTime = 0;
+		audio.play().catch(function() {
+			setTimeout(stopGif, 4000);
+		});
+	});
+
+	audio.addEventListener('ended', stopGif);
 })();
