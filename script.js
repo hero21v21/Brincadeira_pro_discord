@@ -1,0 +1,508 @@
+// RELÓGIO - HORA DO BRASIL (UTC-3)
+(function() {
+	var clockEl = document.getElementById('winClock');
+	if (!clockEl) return;
+
+	function updateClock() {
+		var now = new Date();
+		var brTime = new Date(now.toLocaleString("en-US", { timeZone: "America/Sao_Paulo" }));
+		var hours = brTime.getHours();
+		var minutes = brTime.getMinutes();
+		var seconds = brTime.getSeconds();
+		if (hours < 10) hours = "0" + hours;
+		if (minutes < 10) minutes = "0" + minutes;
+		if (seconds < 10) seconds = "0" + seconds;
+		clockEl.textContent = hours + ":" + minutes + ":" + seconds;
+	}
+
+	updateClock();
+	setInterval(updateClock, 1000);
+})();
+
+// MENU INICIAR + TASKBAR
+(function() {
+	var startBtn = document.getElementById('startBtn');
+	var startMenu = document.getElementById('startMenu');
+
+	function toggleMenu() {
+		if (startMenu) {
+			startMenu.style.display = startMenu.style.display === 'block' ? 'none' : 'block';
+		}
+	}
+
+	if (startBtn) {
+		startBtn.addEventListener('click', function(e) {
+			e.stopPropagation();
+			toggleMenu();
+		});
+	}
+
+	document.addEventListener('click', function(e) {
+		if (startMenu && startMenu.style.display === 'block' && !startMenu.contains(e.target) && e.target !== startBtn) {
+			startMenu.style.display = 'none';
+		}
+	});
+
+	function goToWindow(id) {
+		var el = document.getElementById(id);
+		if (el) {
+			el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+		}
+	}
+
+	document.querySelectorAll('.start-menu-item[data-window]').forEach(function(item) {
+		item.addEventListener('click', function() {
+			goToWindow(this.getAttribute('data-window'));
+			if (startMenu) startMenu.style.display = 'none';
+		});
+	});
+
+	document.querySelectorAll('.win-taskbar-nav .win-taskbar-link').forEach(function(item) {
+		item.addEventListener('click', function(e) {
+			e.preventDefault();
+			var target = this.getAttribute('href');
+			if (target && target.charAt(0) === '#') {
+				goToWindow(target.substring(1));
+			}
+		});
+	});
+})();
+
+// PLAYER DE MÚSICA RETRO - AUDIO HTML5
+(function() {
+	var playlist = [
+		{
+			artist: "The Long Faces",
+			title: "Jane!",
+			cover: "https://i.scdn.co/image/ab67616d0000b2736685599bd4bafe725e532e2f",
+			src: "musicas/jane.mp3"
+		},
+		{
+			artist: "Laufey",
+			title: "From the Start",
+			cover: "https://i.scdn.co/image/ab6761610000e5ebc751deb23ed62e7cadfb669a",
+			src: "musicas/from-the-start.mp3"
+		},
+		{
+			artist: "Jão",
+			title: "Idiota",
+			cover: "https://i.scdn.co/image/ab67616d0000b27376086200d394250d6eef8adf",
+			src: "musicas/idiota.mp3"
+		},
+		{
+			artist: "Jão",
+			title: "Alinhamento Milenar",
+			cover: "https://i.scdn.co/image/ab67616d0000b27376086200d394250d6eef8adf",
+			src: "musicas/alinhamento-milenar.mp3"
+		},
+		{
+			artist: "Jão",
+			title: "Meninos e Meninas",
+			cover: "https://i.scdn.co/image/ab67616d0000b27376086200d394250d6eef8adf",
+			src: "musicas/meninos-e-meninas.mp3"
+		},
+		{
+			artist: "Jão",
+			title: "Me Lambe",
+			cover: "https://i.scdn.co/image/ab67616d0000b27376086200d394250d6eef8adf",
+			src: "musicas/me-lambe.mp3"
+		},
+		{
+			artist: "2ZDinizz",
+			title: "Pensando em Mim",
+			cover: "https://i.scdn.co/image/ab67616d0000b273800ebc6f7b457f363809be8e",
+			src: "musicas/pensando-em-mim.mp3"
+		}
+	];
+
+	var currentIndex = 0;
+	var audio = document.getElementById('html5AudioPlayer');
+	var isPlaying = false;
+	var isShuffle = false;
+	var isRepeat = false;
+
+	var imgCover = document.getElementById('playerCover');
+	var cdIcon = document.getElementById('cdIcon');
+	var btnPlay = document.getElementById('btnPlayPause');
+	var btnPrev = document.getElementById('btnPrev');
+	var btnNext = document.getElementById('btnNext');
+	var btnPrevAll = document.getElementById('btnPrevAll');
+	var btnNextAll = document.getElementById('btnNextAll');
+	var btnShuffle = document.getElementById('btnShuffle');
+	var btnRepeat = document.getElementById('btnRepeat');
+	var btnHeart = document.getElementById('btnHeart');
+	var artistSelect = document.getElementById('artistSelect');
+	var songSelect = document.getElementById('songSelect');
+	var currTime = document.getElementById('currTime');
+	var totalTime = document.getElementById('totalTime');
+	var progressBg = document.getElementById('progressBg');
+	var progressFill = document.getElementById('progressFill');
+	var volUp = document.getElementById('volUp');
+	var volDown = document.getElementById('volDown');
+	var volFill = document.getElementById('volFill');
+
+	if (!audio) return;
+
+	function populateSelects() {
+		if (!artistSelect || !songSelect) return;
+		var artists = [];
+		playlist.forEach(function(item) {
+			if (artists.indexOf(item.artist) === -1) artists.push(item.artist);
+		});
+		artistSelect.innerHTML = '';
+		artists.forEach(function(art) {
+			var opt = document.createElement('option');
+			opt.value = art;
+			opt.textContent = art;
+			artistSelect.appendChild(opt);
+		});
+		updateSongOptions();
+	}
+
+	function updateSongOptions() {
+		if (!artistSelect || !songSelect) return;
+		var selectedArt = artistSelect.value;
+		songSelect.innerHTML = '';
+		playlist.forEach(function(item, idx) {
+			if (item.artist === selectedArt) {
+				var opt = document.createElement('option');
+				opt.value = idx;
+				opt.textContent = item.title;
+				songSelect.appendChild(opt);
+			}
+		});
+	}
+
+	function loadTrack(index, shouldPlay) {
+		currentIndex = index;
+		var track = playlist[index];
+		if (!track) return;
+		audio.src = track.src;
+		if (imgCover) imgCover.src = track.cover;
+		if (artistSelect) artistSelect.value = track.artist;
+		updateSongOptions();
+		if (songSelect) songSelect.value = index;
+		if (shouldPlay) playTrack();
+	}
+
+	function playTrack() {
+		if (audio.pause) audio.pause();
+		audio.play().then(function() {
+			isPlaying = true;
+			if (btnPlay) btnPlay.classList.add('active');
+			if (cdIcon) cdIcon.classList.add('spinning');
+		}).catch(function(err) {
+			console.log("Erro ao tocar áudio:", err);
+		});
+	}
+
+	function pauseTrack() {
+		audio.pause();
+		isPlaying = false;
+		if (btnPlay) btnPlay.classList.remove('active');
+		if (cdIcon) cdIcon.classList.remove('spinning');
+	}
+
+	if (btnPlay) btnPlay.addEventListener('click', function() {
+		if (isPlaying) pauseTrack(); else playTrack();
+	});
+
+	if (btnNext) btnNext.addEventListener('click', function() {
+		currentIndex = isShuffle ? Math.floor(Math.random() * playlist.length) : (currentIndex + 1) % playlist.length;
+		loadTrack(currentIndex, true);
+	});
+
+	if (btnNextAll) btnNextAll.addEventListener('click', function() {
+		currentIndex = playlist.length - 1;
+		loadTrack(currentIndex, true);
+	});
+
+	if (btnPrev) btnPrev.addEventListener('click', function() {
+		currentIndex = (currentIndex - 1 + playlist.length) % playlist.length;
+		loadTrack(currentIndex, true);
+	});
+
+	if (btnPrevAll) btnPrevAll.addEventListener('click', function() {
+		currentIndex = 0;
+		loadTrack(currentIndex, true);
+	});
+
+	if (btnShuffle) btnShuffle.addEventListener('click', function() {
+		isShuffle = !isShuffle;
+		btnShuffle.classList.toggle('active', isShuffle);
+	});
+
+	if (btnRepeat) btnRepeat.addEventListener('click', function() {
+		isRepeat = !isRepeat;
+		btnRepeat.classList.toggle('active', isRepeat);
+	});
+
+	if (btnHeart) btnHeart.addEventListener('click', function() {
+		btnHeart.classList.toggle('active');
+	});
+
+	if (artistSelect) artistSelect.addEventListener('change', function() {
+		updateSongOptions();
+		if (songSelect.options.length > 0) loadTrack(parseInt(songSelect.value), isPlaying);
+	});
+
+	if (songSelect) songSelect.addEventListener('change', function() {
+		loadTrack(parseInt(this.value), isPlaying);
+	});
+
+	function formatTime(sec) {
+		if (isNaN(sec)) return "0:00";
+		var m = Math.floor(sec / 60);
+		var s = Math.floor(sec % 60);
+		if (s < 10) s = "0" + s;
+		return m + ":" + s;
+	}
+
+	audio.addEventListener('timeupdate', function() {
+		if (audio.duration) {
+			if (progressFill) progressFill.style.width = ((audio.currentTime / audio.duration) * 100) + "%";
+			if (currTime) currTime.textContent = formatTime(audio.currentTime);
+			if (totalTime) totalTime.textContent = formatTime(audio.duration);
+		}
+	});
+
+	audio.addEventListener('ended', function() {
+		if (isRepeat) playTrack(); else if (btnNext) btnNext.click();
+	});
+
+	if (progressBg) progressBg.addEventListener('click', function(e) {
+		var rect = progressBg.getBoundingClientRect();
+		var pct = (e.clientX - rect.left) / rect.width;
+		if (audio.duration) audio.currentTime = pct * audio.duration;
+	});
+
+	audio.volume = 0.7;
+	if (volFill) volFill.style.height = "70%";
+
+	if (volUp) volUp.addEventListener('click', function() {
+		audio.volume = Math.min(1, audio.volume + 0.1);
+		if (volFill) volFill.style.height = (audio.volume * 100) + "%";
+	});
+
+	if (volDown) volDown.addEventListener('click', function() {
+		audio.volume = Math.max(0, audio.volume - 0.1);
+		if (volFill) volFill.style.height = (audio.volume * 100) + "%";
+	});
+
+	populateSelects();
+	loadTrack(0, false);
+})();
+
+// PESQUISA DE CONVIDADOS
+(function() {
+	var searchInput = document.getElementById('guestSearch');
+	var searchCount = document.getElementById('guestSearchCount');
+	var rows = document.querySelectorAll('.table-wrapper tbody tr');
+
+	if (!searchInput || !searchCount) return;
+
+	function updateCount(count) {
+		searchCount.textContent = count === 1 ? '1 convidado' : count + ' convidados';
+	}
+
+	updateCount(rows.length);
+
+	searchInput.addEventListener('input', function() {
+		var term = searchInput.value.toLowerCase().trim();
+		var visible = 0;
+
+		rows.forEach(function(row) {
+			var text = row.textContent.toLowerCase();
+			var match = text.indexOf(term) !== -1;
+			row.style.display = match ? '' : 'none';
+			if (match) visible++;
+		});
+
+		updateCount(visible);
+	});
+})();
+
+// MS PAINT DA FESTA
+(function() {
+	var dc = document.getElementById('drawCanvas');
+	if (!dc) return;
+	var dctx = dc.getContext('2d');
+	var drawing = false;
+	var isEraser = false;
+	var lastX = 0, lastY = 0;
+	var history = [];
+
+	function saveState() {
+		if (history.length >= 20) history.shift();
+		history.push(dctx.getImageData(0, 0, dc.width, dc.height));
+	}
+
+	saveState();
+
+	function getPos(e) {
+		var rect = dc.getBoundingClientRect();
+		var scaleX = dc.width / rect.width;
+		var scaleY = dc.height / rect.height;
+		if (e.touches) {
+			return {
+				x: (e.touches[0].clientX - rect.left) * scaleX,
+				y: (e.touches[0].clientY - rect.top) * scaleY
+			};
+		}
+		return {
+			x: (e.clientX - rect.left) * scaleX,
+			y: (e.clientY - rect.top) * scaleY
+		};
+	}
+
+	function startDraw(e) {
+		e.preventDefault();
+		drawing = true;
+		var pos = getPos(e);
+		lastX = pos.x;
+		lastY = pos.y;
+	}
+
+	function draw(e) {
+		if (!drawing) return;
+		e.preventDefault();
+		var pos = getPos(e);
+		var bc = document.getElementById('brushColor');
+		dctx.beginPath();
+		dctx.moveTo(lastX, lastY);
+		dctx.lineTo(pos.x, pos.y);
+		dctx.strokeStyle = isEraser ? '#ffffff' : (bc ? bc.value : '#000000');
+		var bs = document.getElementById('brushSize');
+		dctx.lineWidth = bs ? bs.value : 3;
+		dctx.lineCap = 'round';
+		dctx.lineJoin = 'round';
+		dctx.stroke();
+		lastX = pos.x;
+		lastY = pos.y;
+	}
+
+	function stopDraw() {
+		if (drawing) {
+			drawing = false;
+			saveState();
+		}
+	}
+
+	dc.addEventListener('mousedown', startDraw);
+	dc.addEventListener('mousemove', draw);
+	dc.addEventListener('mouseup', stopDraw);
+	dc.addEventListener('mouseleave', stopDraw);
+	dc.addEventListener('touchstart', startDraw, { passive: false });
+	dc.addEventListener('touchmove', draw, { passive: false });
+	dc.addEventListener('touchend', stopDraw);
+
+	var toolPen = document.getElementById('toolPen');
+	var toolEraser = document.getElementById('toolEraser');
+
+	if (toolPen) toolPen.addEventListener('click', function() {
+		isEraser = false;
+		toolPen.classList.add('active');
+		if (toolEraser) toolEraser.classList.remove('active');
+	});
+
+	if (toolEraser) toolEraser.addEventListener('click', function() {
+		isEraser = true;
+		toolEraser.classList.add('active');
+		if (toolPen) toolPen.classList.remove('active');
+	});
+
+	var btnUndo = document.getElementById('btnUndo');
+	if (btnUndo) btnUndo.addEventListener('click', function() {
+		if (history.length > 1) {
+			history.pop();
+			dctx.putImageData(history[history.length - 1], 0, 0);
+		}
+	});
+
+	var btnClear = document.getElementById('btnClear');
+	if (btnClear) btnClear.addEventListener('click', function() {
+		dctx.clearRect(0, 0, dc.width, dc.height);
+		saveState();
+	});
+
+	var btnSave = document.getElementById('btnSave');
+	if (btnSave) btnSave.addEventListener('click', function() {
+		var link = document.createElement('a');
+		link.download = 'meu-desenho.png';
+		link.href = dc.toDataURL();
+		link.click();
+	});
+
+	var colorPicker = document.getElementById('brushColor');
+	var swatches = document.querySelectorAll('.win-swatch');
+
+	swatches.forEach(function(swatch) {
+		swatch.addEventListener('click', function() {
+			var color = this.getAttribute('data-color');
+			if (colorPicker) colorPicker.value = color;
+			swatches.forEach(function(s) { s.classList.remove('active'); });
+			this.classList.add('active');
+			isEraser = false;
+			if (toolPen) toolPen.classList.add('active');
+			if (toolEraser) toolEraser.classList.remove('active');
+		});
+	});
+
+	if (colorPicker) colorPicker.addEventListener('input', function() {
+		swatches.forEach(function(s) { s.classList.remove('active'); });
+		isEraser = false;
+		if (toolPen) toolPen.classList.add('active');
+		if (toolEraser) toolEraser.classList.remove('active');
+	});
+})();
+
+// MENSAGENS ANÔNIMAS
+(function() {
+	var form = document.getElementById('messageForm');
+	var input = document.getElementById('msgInput');
+	var board = document.getElementById('messageBoard');
+	var storageKey = 'anon_messages_festa';
+
+	if (!form || !input || !board) return;
+
+	function loadMessages() {
+		var saved = localStorage.getItem(storageKey);
+		if (saved) {
+			var msgs = JSON.parse(saved);
+			msgs.forEach(function(m) { renderMsg(m.text, m.time); });
+		}
+	}
+
+	function saveMessage(text, time) {
+		var saved = localStorage.getItem(storageKey);
+		var msgs = saved ? JSON.parse(saved) : [];
+		msgs.push({ text: text, time: time });
+		localStorage.setItem(storageKey, JSON.stringify(msgs));
+	}
+
+	function renderMsg(text, time) {
+		var card = document.createElement('div');
+		card.className = 'msg-card';
+		var p = document.createElement('p');
+		p.textContent = text;
+		var t = document.createElement('div');
+		t.className = 'msg-time';
+		t.textContent = time;
+		card.appendChild(p);
+		card.appendChild(t);
+		board.insertBefore(card, board.firstChild);
+	}
+
+	loadMessages();
+
+	form.addEventListener('submit', function(e) {
+		e.preventDefault();
+		var text = input.value.trim();
+		if (!text) return;
+		var now = new Date();
+		var time = now.toLocaleString('pt-BR');
+		renderMsg(text, time);
+		saveMessage(text, time);
+		input.value = '';
+	});
+})();
