@@ -53,7 +53,7 @@ html {
 	color: #000;
 	text-decoration: none;
 	cursor: pointer;
-	font-family: "MS Sans Serif", Tahoma, sans-serif;
+	font-family: "MS Sans Serif", Tahoma, Arial, sans-serif;
 }
 
 .nav-link:hover {
@@ -70,7 +70,7 @@ html {
 	border: 2px solid #000;
 	box-shadow: inset 1px 1px 0 #fff, inset -1px -1px 0 #707070, 4px 4px 12px rgba(0, 0, 0, 0.5);
 	background: #c0c0c0;
-	font-family: "MS Sans Serif", Tahoma, sans-serif;
+	font-family: "MS Sans Serif", Tahoma, Arial, sans-serif;
 }
 
 .win-titlebar {
@@ -115,7 +115,7 @@ html {
 	justify-content: center;
 	padding: 0;
 	line-height: 1;
-	font-family: Tahoma, sans-serif;
+	font-family: "MS Sans Serif", Tahoma, Arial, sans-serif;
 }
 
 .win-btn:active {
@@ -152,7 +152,7 @@ html {
 }
 
 .naquelepike {
-	font-family: "Vampire Wars", "MS Sans Serif", sans-serif;
+	font-family: "Vampire Wars", "MS Sans Serif", Tahoma, Arial, sans-serif;
 	margin: 15px 0;
 	color: #5e0090;
 	font-size: 2rem;
@@ -160,7 +160,7 @@ html {
 }
 
 .title-date {
-	font-family: "Vampire Wars", sans-serif;
+	font-family: "Vampire Wars", "MS Sans Serif", Tahoma, Arial, sans-serif;
 	color: #5e0090;
 	margin: 20px 0 15px 0;
 	font-size: 1.6rem;
@@ -201,7 +201,7 @@ html {
 }
 
 .info-section-win h2, .section-h2 {
-	font-family: "MS Sans Serif", Tahoma, sans-serif;
+	font-family: "MS Sans Serif", Tahoma, Arial, sans-serif;
 	color: #5e0090;
 	margin-top: 0;
 	font-size: 1.2rem;
@@ -244,7 +244,7 @@ html {
 	background: #ffffff;
 	border: 2px inset #808080;
 	padding: 18px;
-	font-family: "MS Sans Serif", Tahoma, sans-serif;
+	font-family: "MS Sans Serif", Tahoma, Arial, sans-serif;
 }
 
 .about-box h2 {
@@ -296,7 +296,7 @@ html {
 	border: 2px inset #808080;
 	background: #fff;
 	padding: 4px 6px;
-	font-family: "MS Sans Serif", Tahoma, sans-serif;
+	font-family: "MS Sans Serif", Tahoma, Arial, sans-serif;
 	font-size: 12px;
 	outline: none;
 }
@@ -322,7 +322,7 @@ html {
 table {
 	width: 100%;
 	border-collapse: collapse;
-	font-family: "MS Sans Serif", Tahoma, sans-serif;
+	font-family: "MS Sans Serif", Tahoma, Arial, sans-serif;
 	font-size: 11px;
 }
 
@@ -382,7 +382,7 @@ tbody td img.guest-img-clickable.clicked {
 	border: 2px inset #808080;
 	background: #ffffff;
 	padding: 8px;
-	font-family: "MS Sans Serif", Tahoma, sans-serif;
+	font-family: "MS Sans Serif", Tahoma, Arial, sans-serif;
 	font-size: 12px;
 	min-height: 80px;
 	outline: none;
@@ -392,7 +392,7 @@ tbody td img.guest-img-clickable.clicked {
 	background: #c0c0c0;
 	border: 2px solid;
 	border-color: #fff #404040 #404040 #fff;
-	font-family: "MS Sans Serif", Tahoma, sans-serif;
+	font-family: "MS Sans Serif", Tahoma, Arial, sans-serif;
 	font-size: 12px;
 	font-weight: bold;
 	padding: 6px 16px;
@@ -421,7 +421,7 @@ tbody td img.guest-img-clickable.clicked {
 	background: #ffffff;
 	border: 2px inset #808080;
 	padding: 10px;
-	font-family: "MS Sans Serif", Tahoma, sans-serif;
+	font-family: "MS Sans Serif", Tahoma, Arial, sans-serif;
 }
 
 .msg-card p {
@@ -591,7 +591,7 @@ tbody td img.guest-img-clickable.clicked {
 	background: #fff;
 	border: 2px inset #808080;
 	padding: 1px 2px;
-	font-family: "MS Sans Serif", Tahoma, sans-serif;
+	font-family: "MS Sans Serif", Tahoma, Arial, sans-serif;
 	font-size: 11px;
 	outline: none;
 }
@@ -753,7 +753,7 @@ tbody td img.guest-img-clickable.clicked {
 	background: #c0c0c0;
 	border: 2px solid;
 	border-color: #fff #404040 #404040 #fff;
-	font-family: "MS Sans Serif", Tahoma, sans-serif;
+	font-family: "MS Sans Serif", Tahoma, Arial, sans-serif;
 	font-weight: bold;
 	font-size: 12px;
 	padding: 2px 8px;
@@ -793,7 +793,7 @@ tbody td img.guest-img-clickable.clicked {
 	color: #000;
 	text-decoration: none;
 	cursor: pointer;
-	font-family: "MS Sans Serif", Tahoma, sans-serif;
+	font-family: "MS Sans Serif", Tahoma, Arial, sans-serif;
 }
 
 .win-taskbar-link:hover {
@@ -832,7 +832,7 @@ tbody td img.guest-img-clickable.clicked {
 .start-menu-brand {
 	flex: 1;
 	text-align: right;
-	font-family: "MS Sans Serif", Tahoma, sans-serif;
+	font-family: "MS Sans Serif", Tahoma, Arial, sans-serif;
 }
 
 .start-menu-body {
@@ -864,7 +864,7 @@ tbody td img.guest-img-clickable.clicked {
 	padding: 5px 8px;
 	cursor: pointer;
 	font-size: 12px;
-	font-family: "MS Sans Serif", Tahoma, sans-serif;
+	font-family: "MS Sans Serif", Tahoma, Arial, sans-serif;
 }
 
 .start-menu-item:hover {
