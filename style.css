@@ -238,6 +238,40 @@ html {
 	font-weight: bold;
 }
 
+.about-box {
+	background: #ffffff;
+	border: 2px inset #808080;
+	padding: 18px;
+	font-family: "MS Sans Serif", Tahoma, sans-serif;
+}
+
+.about-box h2 {
+	margin-top: 0;
+	color: #5e0090;
+	font-size: 1.3rem;
+}
+
+.about-box p {
+	font-size: 0.95rem;
+	line-height: 1.6;
+	color: #000;
+	margin: 8px 0;
+}
+
+.about-box strong {
+	color: #5e0090;
+}
+
+.about-note {
+	font-weight: bold;
+	color: #5e0090 !important;
+	text-align: center;
+	margin-top: 14px !important;
+	background: #e8d5f5;
+	padding: 8px;
+	border: 1px solid #cd59ff;
+}
+
 /* TABELA ESTILO EXCEL WINDOWS 95 */
 .guest-search-box {
 	background: #c0c0c0;
