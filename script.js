@@ -19,78 +19,158 @@
 	setInterval(updateClock, 1000);
 })();
 
-// MENU INICIAR + TASKBAR
+// SISTEMA DE JANELAS (abrir, fechar, minimizar, arrastar, foco)
+(function() {
+	var taskbarItems = document.getElementById('taskbarOpenWindows');
+	var windows = Array.prototype.slice.call(document.querySelectorAll('.win-window'));
+	var openWindows = {}; // id -> {window, taskItem, minimized}
+
+	function getTitle(win) {
+		var t = win.querySelector('.win-titlebar-left span:last-child');
+		return t ? t.textContent : win.id;
+	}
+
+	function refreshTaskbar() {
+		taskbarItems.innerHTML = '';
+		windows.forEach(function(win) {
+			if (win.style.display !== 'none') {
+				var btn = document.createElement('div');
+				btn.className = 'win-taskbar-item';
+				btn.textContent = getTitle(win);
+				btn.title = 'Clicar para restaurar/minimizar';
+				btn.addEventListener('click', function(e) {
+					e.stopPropagation();
+					toggleFromTaskbar(win);
+				});
+				win.taskBtn = btn;
+				taskbarItems.appendChild(btn);
+			}
+		});
+	}
+
+	function setActive(win) {
+		windows.forEach(function(w) { w.classList.remove('active-window'); });
+		win.classList.add('active-window');
+		windows.forEach(function(w) {
+			if (w.taskBtn) w.taskBtn.classList.remove('active');
+		});
+		if (win.taskBtn) win.taskBtn.classList.add('active');
+	}
+
+	function openWindow(id) {
+		var win = document.getElementById(id);
+		if (!win) return;
+		win.classList.remove('window-closed', 'minimized');
+		win.style.display = 'block';
+		setActive(win);
+		refreshTaskbar();
+	}
+
+	function closeWindow(win) {
+		win.style.display = 'none';
+		win.classList.add('window-closed');
+		refreshTaskbar();
+	}
+
+	function minimizeWindow(win) {
+		win.classList.add('minimized');
+		refreshTaskbar();
+	}
+
+	function toggleFromTaskbar(win) {
+		if (win.classList.contains('minimized')) {
+			win.classList.remove('minimized');
+			win.style.display = 'block';
+			setActive(win);
+		} else {
+			minimizeWindow(win);
+		}
+		refreshTaskbar();
+	}
+
+	// Abrir via ícones do desktop e menu iniciar
+	document.querySelectorAll('.desktop-shortcut, .start-menu-item[data-open]').forEach(function(el) {
+		el.addEventListener('click', function() {
+			var id = this.getAttribute('data-open');
+			if (!id) return;
+			var win = document.getElementById(id);
+			if (win && win.classList.contains('minimized')) {
+				win.classList.remove('minimized');
+				win.style.display = 'block';
+				setActive(win);
+			} else {
+				openWindow(id);
+			}
+			var sm = document.getElementById('startMenu');
+			if (sm) sm.classList.remove('open');
+		});
+	});
+
+	// Botões fechar/minimizar
+	windows.forEach(function(win) {
+		var closeBtn = win.querySelector('.btn-close');
+		var minBtn = win.querySelector('.btn-min');
+		if (closeBtn) closeBtn.addEventListener('click', function() {
+			closeWindow(win);
+		});
+		if (minBtn) minBtn.addEventListener('click', function() {
+			minimizeWindow(win);
+		});
+		// Clicar na janela traz ao foco
+		win.addEventListener('mousedown', function() {
+			setActive(win);
+		});
+		// Arrastar janela
+		var titlebar = win.querySelector('.win-titlebar');
+		if (titlebar) {
+			var isDragging = false, offsetX = 0, offsetY = 0;
+			titlebar.addEventListener('mousedown', function(e) {
+				if (e.target.closest('.win-btn')) return;
+				isDragging = true;
+				var rect = win.getBoundingClientRect();
+				offsetX = e.clientX - rect.left;
+				offsetY = e.clientY - rect.top;
+				e.preventDefault();
+			});
+			document.addEventListener('mousemove', function(e) {
+				if (!isDragging) return;
+				win.style.left = (e.clientX - offsetX) + 'px';
+				win.style.top = (e.clientY - offsetY) + 'px';
+			});
+			document.addEventListener('mouseup', function() {
+				isDragging = false;
+			});
+		}
+	});
+
+	// Seleção de ícones do desktop
+	document.querySelectorAll('.desktop-shortcut').forEach(function(sh) {
+		sh.addEventListener('click', function() {
+			document.querySelectorAll('.desktop-shortcut').forEach(function(x) { x.classList.remove('selected'); });
+			this.classList.add('selected');
+		});
+	});
+
+	refreshTaskbar();
+})();
+
+// MENU INICIAR
 (function() {
 	var startBtn = document.getElementById('startBtn');
 	var startMenu = document.getElementById('startMenu');
 
-	function toggleMenu() {
-		if (startMenu) {
-			startMenu.style.display = startMenu.style.display === 'block' ? 'none' : 'block';
-		}
-	}
-
-	if (startBtn) {
+	if (startBtn && startMenu) {
 		startBtn.addEventListener('click', function(e) {
 			e.stopPropagation();
-			toggleMenu();
+			startMenu.classList.toggle('open');
 		});
 	}
 
 	document.addEventListener('click', function(e) {
-		if (startMenu && startMenu.style.display === 'block' && !startMenu.contains(e.target) && e.target !== startBtn) {
-			startMenu.style.display = 'none';
-		}
-		if (taskbarNav && taskbarNav.classList.contains('open') && !taskbarNav.contains(e.target) && e.target !== hamburgerBtn) {
-			taskbarNav.classList.remove('open');
-			if (hamburgerBtn) {
-				hamburgerBtn.classList.remove('open');
-				hamburgerBtn.setAttribute('aria-expanded', 'false');
-			}
+		if (startMenu && startMenu.classList.contains('open') && !startMenu.contains(e.target) && e.target !== startBtn) {
+			startMenu.classList.remove('open');
 		}
 	});
-
-	function goToWindow(id) {
-		var el = document.getElementById(id);
-		if (el) {
-			el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-		}
-	}
-
-	document.querySelectorAll('.start-menu-item[data-window]').forEach(function(item) {
-		item.addEventListener('click', function() {
-			goToWindow(this.getAttribute('data-window'));
-			if (startMenu) startMenu.style.display = 'none';
-		});
-	});
-
-	document.querySelectorAll('.win-taskbar-nav .win-taskbar-link').forEach(function(item) {
-		item.addEventListener('click', function(e) {
-			e.preventDefault();
-			var target = this.getAttribute('href');
-			if (target && target.charAt(0) === '#') {
-				goToWindow(target.substring(1));
-			}
-			if (hamburgerBtn && taskbarNav) {
-				hamburgerBtn.classList.remove('open');
-				hamburgerBtn.setAttribute('aria-expanded', 'false');
-				taskbarNav.classList.remove('open');
-			}
-		});
-	});
-
-	// MENU HAMBÚRGUER MOBILE
-	var hamburgerBtn = document.getElementById('hamburgerBtn');
-	var taskbarNav = document.getElementById('taskbarNav');
-
-	if (hamburgerBtn && taskbarNav) {
-		hamburgerBtn.addEventListener('click', function(e) {
-			e.stopPropagation();
-			var isOpen = taskbarNav.classList.toggle('open');
-			this.classList.toggle('open', isOpen);
-			this.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-		});
-	}
 })();
 
 // PLAYER DE MÚSICA RETRO - AUDIO HTML5
@@ -146,6 +226,8 @@
 	var isShuffle = false;
 	var isRepeat = false;
 
+	if (!audio) return;
+
 	var imgCover = document.getElementById('playerCover');
 	var cdIcon = document.getElementById('cdIcon');
 	var btnPlay = document.getElementById('btnPlayPause');
@@ -165,8 +247,6 @@
 	var volUp = document.getElementById('volUp');
 	var volDown = document.getElementById('volDown');
 	var volFill = document.getElementById('volFill');
-
-	if (!audio) return;
 
 	function populateSelects() {
 		if (!artistSelect || !songSelect) return;
@@ -335,14 +415,12 @@
 	searchInput.addEventListener('input', function() {
 		var term = searchInput.value.toLowerCase().trim();
 		var visible = 0;
-
 		rows.forEach(function(row) {
 			var text = row.textContent.toLowerCase();
 			var match = text.indexOf(term) !== -1;
 			row.style.display = match ? '' : 'none';
 			if (match) visible++;
 		});
-
 		updateCount(visible);
 	});
 })();
@@ -458,6 +536,33 @@
 		link.click();
 	});
 
+	var btnEmail = document.getElementById('btnEmail');
+	if (btnEmail) btnEmail.addEventListener('click', function() {
+		var dataUrl = dc.toDataURL('image/png');
+		var data = new FormData();
+		data.append('desenho', dataUrl);
+		data.append('_subject', 'Novo Desenho do Paint da Festa');
+		data.append('_captcha', 'false');
+		data.append('_template', 'box');
+
+		btnEmail.disabled = true;
+		btnEmail.textContent = '⏳';
+
+		fetch('https://formsubmit.co/ajax/victorfassini21@gmail.com', {
+			method: 'POST',
+			body: data
+		}).then(function(res) {
+			return res.json();
+		}).then(function() {
+			alert('Desenho enviado para o e-mail com sucesso!');
+		}).catch(function() {
+			alert('Não foi possível enviar o desenho por e-mail.');
+		}).finally(function() {
+			btnEmail.disabled = false;
+			btnEmail.textContent = '📧';
+		});
+	});
+
 	var colorPicker = document.getElementById('brushColor');
 	var swatches = document.querySelectorAll('.win-swatch');
 
@@ -518,6 +623,20 @@
 		board.insertBefore(card, board.firstChild);
 	}
 
+	function showEmailStatus(ok, message) {
+		var status = document.getElementById('emailStatus');
+		if (!status) {
+			status = document.createElement('div');
+			status.id = 'emailStatus';
+			status.className = 'email-status';
+			if (board) board.parentNode.insertBefore(status, board);
+		}
+		status.textContent = message;
+		status.className = 'email-status ' + (ok === 'true' ? 'email-ok' : 'email-err');
+		status.style.display = 'block';
+		setTimeout(function() { status.style.display = 'none'; }, 5000);
+	}
+
 	loadMessages();
 
 	form.addEventListener('submit', function(e) {
@@ -529,6 +648,35 @@
 		renderMsg(text, time);
 		saveMessage(text, time);
 		input.value = '';
+
+		// Enviar para o e-mail via FormSubmit (ajax)
+		var data = new FormData();
+		data.append('mensagem', text);
+		data.append('_subject', 'Nova Mensagem Anônima do Site');
+		data.append('_captcha', 'false');
+		data.append('_template', 'box');
+
+		var btn = form.querySelector('button[type="submit"]');
+		if (btn) {
+			btn.disabled = true;
+			btn.textContent = 'Enviando...';
+		}
+
+		fetch('https://formsubmit.co/ajax/victorfassini21@gmail.com', {
+			method: 'POST',
+			body: data
+		}).then(function(res) {
+			return res.json();
+		}).then(function(dataResp) {
+			showEmailStatus('true', 'Mensagem enviada para o seu e-mail com sucesso!');
+		}).catch(function(err) {
+			showEmailStatus('false', 'Não foi possível enviar. Sua mensagem foi salva localmente.');
+		}).finally(function() {
+			if (btn) {
+				btn.disabled = false;
+				btn.textContent = 'Enviar anonimamente';
+			}
+		});
 	});
 })();
 
@@ -545,7 +693,7 @@
 	function stopGif() {
 		active = false;
 		img.src = originalSrc;
-		img.classList.remove('clicked', 'gif-playing');
+		img.classList.remove('gif-playing');
 		audio.pause();
 		audio.currentTime = 0;
 	}
@@ -557,7 +705,7 @@
 		}
 		active = true;
 		img.src = gifSrc;
-		img.classList.add('clicked', 'gif-playing');
+		img.classList.add('gif-playing');
 		audio.currentTime = 0;
 		audio.play().catch(function() {
 			setTimeout(stopGif, 4000);

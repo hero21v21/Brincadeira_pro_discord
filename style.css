@@ -2,80 +2,96 @@
 	box-sizing: border-box;
 }
 
+html, body {
+	height: 100%;
+	margin: 0;
+}
+
 body {
 	background-image: url('https://i.pinimg.com/1200x/59/9f/9f/599f9f55d0b8063264261cccbe0b2439.jpg');
 	background-repeat: no-repeat;
-	background-attachment: fixed;
 	background-position: center center;
-	background-size: 100% auto;
+	background-size: cover;
 	background-color: #3a2b0f;
-	margin: 0;
-	padding: 20px 10px 60px 10px;
 	font-family: "MS Sans Serif", Tahoma, Arial, sans-serif;
 	font-size: 12px;
 	color: #000;
-}
-
-html {
-	scroll-behavior: smooth;
-}
-
-.main-container {
-	max-width: 900px;
-	margin: 0 auto;
-	display: flex;
-	flex-direction: column;
-	gap: 25px;
-}
-
-.win-window,
-.retro-player {
-	scroll-margin-top: 15px;
-}
-
-.win-window {
-	min-width: 0;
 	overflow: hidden;
 }
 
-.nav-bar {
+/* DESKTOP */
+.desktop {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 32px; /* espaço para a taskbar */
+	overflow: hidden;
+}
+
+.desktop-icons {
+	position: absolute;
+	top: 12px;
+	left: 12px;
 	display: flex;
+	flex-direction: column;
+	gap: 14px;
+}
+
+.desktop-shortcut {
+	width: 78px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 	gap: 4px;
-	background: #c0c0c0;
-	border: 2px solid #000;
-	box-shadow: inset 1px 1px 0 #fff, inset -1px -1px 0 #707070;
-	padding: 4px;
-	justify-content: center;
-	flex-wrap: wrap;
-}
-
-.nav-link {
-	background: #c0c0c0;
-	border: 1px solid;
-	border-color: #fff #404040 #404040 #fff;
-	padding: 4px 14px;
-	font-size: 12px;
-	color: #000;
-	text-decoration: none;
 	cursor: pointer;
+	user-select: none;
+	text-align: center;
+}
+
+.shortcut-icon {
+	font-size: 32px;
+	line-height: 1.1;
+	text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
+}
+
+.shortcut-label {
+	font-size: 11px;
+	color: #fff;
+	background: rgba(0, 0, 0, 0.55);
+	padding: 1px 3px;
 	font-family: "MS Sans Serif", Tahoma, Arial, sans-serif;
+	text-shadow: 1px 1px 0 #000;
 }
 
-.nav-link:hover {
+.desktop-shortcut:hover .shortcut-label,
+.desktop-shortcut.selected .shortcut-label {
 	background: #5e0090;
-	color: white;
+	text-decoration: underline;
 }
 
-.nav-link:active {
-	border-color: #404040 #fff #fff #404040;
-}
-
-/* JANELAS CLASSICAS DO WINDOWS 95/98 */
+/* JANELAS */
 .win-window {
+	position: absolute;
+	background: #c0c0c0;
 	border: 2px solid #000;
 	box-shadow: inset 1px 1px 0 #fff, inset -1px -1px 0 #707070, 4px 4px 12px rgba(0, 0, 0, 0.5);
-	background: #c0c0c0;
 	font-family: "MS Sans Serif", Tahoma, Arial, sans-serif;
+	min-width: 260px;
+	display: none;
+	z-index: 10;
+}
+
+.win-window.active-window {
+	z-index: 100;
+}
+
+.win-window.minimized {
+	display: none !important;
+}
+
+.win-window.window-closed {
+	display: none !important;
 }
 
 .win-titlebar {
@@ -85,25 +101,30 @@ html {
 	align-items: center;
 	justify-content: space-between;
 	user-select: none;
+	cursor: move;
+	height: 22px;
 }
 
 .win-titlebar-left {
 	display: flex;
 	align-items: center;
-	gap: 6px;
+	gap: 5px;
 	color: white;
 	font-weight: bold;
 	font-size: 12px;
-	text-shadow: 1px 1px 0 rgba(0,0,0,0.5);
+	text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
+	white-space: nowrap;
+	overflow: hidden;
 }
 
 .win-title-icon {
-	font-size: 14px;
+	font-size: 13px;
 }
 
 .win-titlebar-buttons {
 	display: flex;
 	gap: 2px;
+	flex-shrink: 0;
 }
 
 .win-btn {
@@ -120,7 +141,7 @@ html {
 	justify-content: center;
 	padding: 0;
 	line-height: 1;
-	font-family: "MS Sans Serif", Tahoma, Arial, sans-serif;
+	font-family: Tahoma, sans-serif;
 }
 
 .win-btn:active {
@@ -128,37 +149,21 @@ html {
 	box-shadow: inset 1px 1px 0 #808080;
 }
 
-.win-menubar {
-	background: #c0c0c0;
-	padding: 2px 6px;
-	border-bottom: 1px solid #808080;
-	display: flex;
-	gap: 4px;
-}
-
-.win-menu-item {
-	padding: 2px 8px;
-	cursor: default;
-	color: #000;
-}
-
-.win-menu-item:hover {
-	background: #5e0090;
-	color: white;
-}
-
+/* CORPO DAS JANELAS */
 .win-body-content {
-	padding: 20px;
-	background: #c0c0c0;
+	padding: 14px;
+	overflow-y: auto;
+	max-height: calc(100vh - 90px);
 }
 
 .text-center {
 	text-align: center;
 }
 
+/* CONTENT */
 .naquelepike {
 	font-family: "Vampire Wars", "MS Sans Serif", Tahoma, Arial, sans-serif;
-	margin: 15px 0;
+	margin: 10px 0;
 	color: #5e0090;
 	font-size: 2rem;
 	text-shadow: 1px 1px 0 #fff;
@@ -167,582 +172,191 @@ html {
 .title-date {
 	font-family: "Vampire Wars", "MS Sans Serif", Tahoma, Arial, sans-serif;
 	color: #5e0090;
-	margin: 20px 0 15px 0;
-	font-size: 1.6rem;
+	margin: 12px 0 10px 0;
+	font-size: 1.5rem;
 }
 
 .hero-gif img {
 	max-width: 100%;
 	height: auto;
-	max-height: 380px;
+	max-height: 300px;
 	border: 2px inset #808080;
 }
 
 .content-block {
-	margin-top: 20px;
-	padding: 15px;
+	margin-top: 12px;
+	padding: 12px;
 	border: 2px inset #808080;
 	background: #ffffff;
 }
 
 .content-block img {
 	max-width: 100%;
-	width: 300px;
+	width: 280px;
 	border: 2px inset #808080;
 }
 
 .intro-text {
-	font-size: 1rem;
-	line-height: 1.5;
+	font-size: 0.95rem;
+	line-height: 1.4;
 	color: #000;
-	margin-top: 15px;
+	margin-top: 10px;
 }
 
 .info-section-win {
-	margin-bottom: 20px;
+	margin-bottom: 14px;
 	background: #ffffff;
-	padding: 15px;
+	padding: 12px;
 	border: 2px inset #808080;
 }
 
 .info-section-win h2, .section-h2 {
-	font-family: "MS Sans Serif", Tahoma, Arial, sans-serif;
 	color: #5e0090;
 	margin-top: 0;
-	font-size: 1.2rem;
+	font-size: 1.1rem;
 	font-weight: bold;
 	border-bottom: 2px solid #5e0090;
-	padding-bottom: 4px;
+	padding-bottom: 3px;
 }
 
 .info-section-win p, .info-section-win ul {
-	font-size: 0.95rem;
-	line-height: 1.6;
+	font-size: 0.9rem;
+	line-height: 1.5;
 	color: #000;
 }
 
 .info-section-win ul {
-	padding-left: 20px;
-}
-
-.map-container {
-	margin-top: 10px;
-	border: 2px inset #808080;
-	height: 320px;
-}
-
-.map-container img {
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
-	display: block;
+	padding-left: 18px;
 }
 
 .contact-info {
 	background: #ffffcc;
-	padding: 10px;
+	padding: 8px;
 	border: 1px solid #808080;
 	font-weight: bold;
 }
 
+/* ABOUT */
 .about-box {
 	background: #ffffff;
 	border: 2px inset #808080;
-	padding: 18px;
-	font-family: "MS Sans Serif", Tahoma, Arial, sans-serif;
+	padding: 14px;
 }
 
-.about-box h2 {
-	margin-top: 0;
-	color: #5e0090;
-	font-size: 1.3rem;
-}
+.about-box h2 { color: #5e0090; margin-top: 0; font-size: 1.2rem; }
+.about-box p { font-size: 0.9rem; line-height: 1.5; color: #000; margin: 8px 0; }
+.about-box strong { color: #5e0090; }
+.about-note { font-weight: bold; color: #5e0090 !important; text-align: center; margin-top: 12px !important; background: #e8d5f5; padding: 6px; border: 1px solid #cd59ff; }
 
-.about-box p {
-	font-size: 0.95rem;
-	line-height: 1.6;
-	color: #000;
-	margin: 8px 0;
-}
-
-.about-box strong {
-	color: #5e0090;
-}
-
-.about-note {
-	font-weight: bold;
-	color: #5e0090 !important;
-	text-align: center;
-	margin-top: 14px !important;
-	background: #e8d5f5;
-	padding: 8px;
-	border: 1px solid #cd59ff;
-}
-
-/* TABELA ESTILO EXCEL WINDOWS 95 */
+/* TABELA */
 .guest-search-box {
 	background: #c0c0c0;
 	border: 2px inset #808080;
-	padding: 8px;
-	margin-bottom: 8px;
+	padding: 6px;
+	margin-bottom: 6px;
 	display: flex;
 	align-items: center;
-	gap: 8px;
+	gap: 6px;
 	flex-wrap: wrap;
 }
-
-.guest-search-box label {
-	font-weight: bold;
-}
-
+.guest-search-box label { font-weight: bold; }
 #guestSearch {
 	flex: 1;
-	min-width: 180px;
+	min-width: 120px;
 	border: 2px inset #808080;
 	background: #fff;
-	padding: 4px 6px;
-	font-family: "MS Sans Serif", Tahoma, Arial, sans-serif;
-	font-size: 12px;
+	padding: 3px 5px;
+	font-size: 11px;
 	outline: none;
 }
-
-#guestSearch:focus {
-	outline: 1px dotted #5e0090;
-}
-
-#guestSearchCount {
-	border: 1px inset #808080;
-	background: #efefef;
-	padding: 3px 8px;
-	font-size: 11px;
-	white-space: nowrap;
-}
+#guestSearchCount { border: 1px inset #808080; background: #efefef; padding: 2px 6px; font-size: 10px; white-space: nowrap; }
 
 .table-wrapper {
 	border: 2px inset #808080;
 	background: #ffffff;
-	overflow-x: auto;
+	overflow: auto;
+	max-height: calc(100vh - 220px);
 }
-
-table {
-	width: 100%;
-	border-collapse: collapse;
-	font-family: "MS Sans Serif", Tahoma, Arial, sans-serif;
-	font-size: 11px;
-}
-
+table { width: 100%; border-collapse: collapse; font-size: 10px; }
 thead th {
 	background: #c0c0c0;
 	border: 1px solid;
 	border-color: #fff #404040 #404040 #fff;
-	padding: 4px 8px;
+	padding: 3px 6px;
 	text-align: left;
-	color: #000;
+	position: sticky;
+	top: 0;
 }
+tbody td { border: 1px solid #d0d0d0; padding: 4px 6px; vertical-align: middle; }
+tbody tr:nth-child(even) { background: #f5f5f5; }
+tbody td img { width: 40px; height: 40px; object-fit: cover; border: 1px inset #808080; display: block; }
 
-tbody td {
-	border: 1px solid #d0d0d0;
-	padding: 6px 8px;
-	vertical-align: middle;
-}
+tbody td img.guest-img-clickable { cursor: pointer; }
+.guest-img-clickable.gif-playing { width: 60px; height: 60px; }
 
-tbody tr:nth-child(even) {
-	background: #f5f5f5;
-}
+/* PLAYER DE MÚSICA */
+.retro-player .player-body { padding: 8px; display: flex; flex-direction: column; gap: 8px; font-size: 11px; }
+.player-top { display: flex; gap: 10px; align-items: center; }
+.album-cover-box { width: 100px; height: 100px; border: 2px inset #808080; background: #000; padding: 2px; flex-shrink: 0; }
+.album-cover-box img { width: 100%; height: 100%; object-fit: cover; }
+.player-controls-right { display: flex; flex-direction: column; gap: 6px; align-items: center; flex: 1; }
+.decor-icons { display: flex; gap: 10px; font-size: 18px; }
+.cd-icon.spinning { animation: spinCD 3s linear infinite; }
+@keyframes spinCD { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+.volume-box { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.vol-btn { width: 22px; height: 16px; background: #c0c0c0; border: 1px solid; border-color: #fff #404040 #404040 #fff; font-weight: bold; cursor: pointer; line-height: 1; font-size: 10px; }
+.vol-btn:active { border-color: #404040 #fff #fff #404040; }
+.vol-bar-bg { width: 7px; height: 30px; border: 1px inset #808080; background: #fff; position: relative; }
+.vol-bar-fill { width: 100%; height: 70%; background: #5e0090; position: absolute; bottom: 0; }
+.player-middle-btns { display: flex; flex-direction: column; gap: 3px; }
+.btn-row { display: flex; gap: 3px; justify-content: center; }
+.p-btn { background: #c0c0c0; border: 1px solid; border-color: #fff #404040 #404040 #fff; font-size: 10px; font-weight: bold; cursor: pointer; padding: 2px 5px; min-width: 26px; }
+.p-btn:active, .p-btn.active { border-color: #404040 #fff #fff #404040; background: #a0a0a0; }
+#btnHeart.active { color: red; }
+.player-info-fields { display: flex; flex-direction: column; gap: 4px; }
+.info-row { display: flex; align-items: center; gap: 4px; font-size: 11px; }
+.info-row label { width: 42px; text-align: right; font-weight: bold; }
+.retro-select { flex: 1; background: #fff; border: 2px inset #808080; padding: 1px 2px; font-size: 11px; outline: none; }
+.player-progress-area { display: flex; align-items: center; gap: 6px; font-size: 10px; font-weight: bold; }
+.progress-bar-bg { flex: 1; height: 12px; border: 1px inset #808080; background: #fff; cursor: pointer; position: relative; }
+.progress-bar-fill { width: 0%; height: 100%; background: #5e0090; }
 
-tbody td img {
-	width: 50px;
-	height: 50px;
-	object-fit: cover;
-	border: 1px inset #808080;
-	display: block;
-}
+/* PAINT */
+.win-paint-body { display: flex; padding: 4px; gap: 4px; }
+.win-left-tools { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; width: 52px; align-content: start; }
+.win-tool { width: 23px; height: 23px; background: #c0c0c0; border: 1px solid; border-color: #fff #404040 #404040 #fff; cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center; padding: 0; }
+.win-tool:active, .win-tool.active { border-color: #404040 #fff #fff #404040; background: #e0e0e0; box-shadow: inset 1px 1px 0 #808080; }
+.win-tool-size { grid-column: span 2; margin-top: 6px; font-size: 9px; text-align: center; }
+.win-tool-size input { width: 100%; accent-color: #5e0090; }
+.win-canvas-area { border: 2px inset #808080; background: #808080; padding: 3px; flex: 1; overflow: auto; display: flex; justify-content: center; align-items: center; }
+#drawCanvas { background: white; cursor: crosshair; display: block; max-width: 100%; }
+.win-color-bar { display: flex; align-items: center; gap: 6px; padding: 4px 6px; border-top: 1px solid #808080; }
+.win-color-picker { width: 22px; height: 22px; border: 2px inset #808080; padding: 0; cursor: pointer; background: none; }
+.win-palette { display: flex; flex-wrap: wrap; gap: 2px; }
+.win-swatch { width: 13px; height: 13px; border: 1px solid #404040; cursor: pointer; padding: 0; }
+.win-swatch.active { outline: 2px solid #5e0090; outline-offset: -1px; }
+.win-statusbar { border-top: 1px solid #fff; box-shadow: inset 0 1px 0 #808080; padding: 2px 6px; font-size: 10px; color: #333; }
 
-tbody td img.guest-img-clickable {
-	cursor: pointer;
-	transition: transform 0.2s ease;
-}
+/* MENSAGENS */
+#messageForm { display: flex; flex-direction: column; gap: 8px; }
+#messageForm textarea { border: 2px inset #808080; background: #fff; padding: 6px; font-family: Arial, sans-serif; font-size: 12px; min-height: 70px; outline: none; }
+.win-btn-action { background: #c0c0c0; border: 2px solid; border-color: #fff #404040 #404040 #fff; font-size: 12px; font-weight: bold; padding: 5px 14px; cursor: pointer; align-self: center; }
+.win-btn-action:active { border-color: #404040 #fff #fff #404040; }
+#messageBoard { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; max-height: 200px; overflow-y: auto; }
+.msg-card { background: #fff; border: 2px inset #808080; padding: 8px; font-size: 11px; }
+.msg-card p { margin: 0; }
+.msg-card .msg-time { font-size: 9px; color: #666; text-align: right; margin-top: 3px; }
 
-tbody td img.guest-img-clickable:hover,
-tbody td img.guest-img-clickable.clicked {
-	box-shadow: 0 0 0 3px #5e0090;
-}
+.email-status { display: none; margin: 8px 0; padding: 8px; font-weight: bold; font-size: 11px; border: 1px solid #808080; }
+.email-ok { background: #e6ffe6; color: #006600; border-color: #00cc00; }
+.email-err { background: #ffe6e6; color: #990000; border-color: #ff6666; }
 
-.guest-img-clickable.gif-playing {
-	width: 90px;
-	height: 90px;
-	object-fit: cover;
-}
-
-/* MENSAGENS ANÔNIMAS */
-#messageForm {
-	display: flex;
-	flex-direction: column;
-	gap: 10px;
-	max-width: 550px;
-	margin: 0 auto;
-}
-
-#messageForm textarea {
-	border: 2px inset #808080;
-	background: #ffffff;
-	padding: 8px;
-	font-family: "MS Sans Serif", Tahoma, Arial, sans-serif;
-	font-size: 12px;
-	min-height: 80px;
-	outline: none;
-}
-
-.win-btn-action {
-	background: #c0c0c0;
-	border: 2px solid;
-	border-color: #fff #404040 #404040 #fff;
-	font-family: "MS Sans Serif", Tahoma, Arial, sans-serif;
-	font-size: 12px;
-	font-weight: bold;
-	padding: 6px 16px;
-	cursor: pointer;
-	align-self: center;
-}
-
-.win-btn-action:active {
-	border-color: #404040 #fff #fff #404040;
-	box-shadow: inset 1px 1px 0 #808080;
-}
-
-#messageBoard {
-	margin-top: 15px;
-	display: flex;
-	flex-direction: column;
-	gap: 8px;
-	max-width: 550px;
-	margin-left: auto;
-	margin-right: auto;
-	max-height: 350px;
-	overflow-y: auto;
-}
-
-.msg-card {
-	background: #ffffff;
-	border: 2px inset #808080;
-	padding: 10px;
-	font-family: "MS Sans Serif", Tahoma, Arial, sans-serif;
-}
-
-.msg-card p {
-	margin: 0;
-	font-size: 11px;
-	line-height: 1.4;
-}
-
-.msg-card .msg-time {
-	font-size: 9px;
-	color: #666;
-	text-align: right;
-	margin-top: 4px;
-}
-
-/* PLAYER DE MÚSICA FLUTUANTE */
-.retro-player {
-	width: 300px;
-	position: fixed;
-	top: 15px;
-	right: 15px;
-	z-index: 9999;
-}
-
-.player-body {
-	padding: 8px;
-	display: flex;
-	flex-direction: column;
-	gap: 8px;
-}
-
-.player-top {
-	display: flex;
-	gap: 10px;
-	align-items: center;
-}
-
-.album-cover-box {
-	width: 110px;
-	height: 110px;
-	border: 2px inset #808080;
-	background: #000;
-	padding: 2px;
-}
-
-.album-cover-box img {
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
-}
-
-.player-controls-right {
-	display: flex;
-	flex-direction: column;
-	gap: 8px;
-	align-items: center;
-	flex: 1;
-}
-
-.decor-icons {
-	display: flex;
-	gap: 10px;
-	font-size: 18px;
-}
-
-.cd-icon.spinning {
-	animation: spinCD 3s linear infinite;
-}
-
-@keyframes spinCD {
-	from { transform: rotate(0deg); }
-	to { transform: rotate(360deg); }
-}
-
-.volume-box {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	gap: 2px;
-}
-
-.vol-btn {
-	width: 24px;
-	height: 18px;
-	background: #c0c0c0;
-	border: 1px solid;
-	border-color: #fff #404040 #404040 #fff;
-	font-weight: bold;
-	cursor: pointer;
-	line-height: 1;
-	font-size: 10px;
-}
-
-.vol-btn:active {
-	border-color: #404040 #fff #fff #404040;
-}
-
-.vol-bar-bg {
-	width: 8px;
-	height: 35px;
-	border: 1px inset #808080;
-	background: #fff;
-	position: relative;
-}
-
-.vol-bar-fill {
-	width: 100%;
-	height: 70%;
-	background: #5e0090;
+/* BARRA DE TAREFAS */
+.win-taskbar {
 	position: absolute;
 	bottom: 0;
-}
-
-.player-middle-btns {
-	display: flex;
-	flex-direction: column;
-	gap: 3px;
-}
-
-.btn-row {
-	display: flex;
-	gap: 3px;
-	justify-content: center;
-}
-
-.p-btn {
-	background: #c0c0c0;
-	border: 1px solid;
-	border-color: #fff #404040 #404040 #fff;
-	font-size: 10px;
-	font-weight: bold;
-	cursor: pointer;
-	padding: 2px 6px;
-	min-width: 28px;
-}
-
-.p-btn:active, .p-btn.active {
-	border-color: #404040 #fff #fff #404040;
-	background: #a0a0a0;
-}
-
-#btnHeart.active {
-	color: red;
-}
-
-.player-info-fields {
-	display: flex;
-	flex-direction: column;
-	gap: 4px;
-}
-
-.info-row {
-	display: flex;
-	align-items: center;
-	gap: 4px;
-	font-size: 11px;
-}
-
-.info-row label {
-	width: 45px;
-	text-align: right;
-	font-weight: bold;
-}
-
-.retro-select {
-	flex: 1;
-	background: #fff;
-	border: 2px inset #808080;
-	padding: 1px 2px;
-	font-family: "MS Sans Serif", Tahoma, Arial, sans-serif;
-	font-size: 11px;
-	outline: none;
-}
-
-.player-progress-area {
-	display: flex;
-	align-items: center;
-	gap: 6px;
-	font-size: 10px;
-	font-weight: bold;
-}
-
-.progress-bar-bg {
-	flex: 1;
-	height: 12px;
-	border: 1px inset #808080;
-	background: #fff;
-	cursor: pointer;
-	position: relative;
-}
-
-.progress-bar-fill {
-	width: 0%;
-	height: 100%;
-	background: #5e0090;
-}
-
-/* WINDOWS PAINT RETRO UI */
-.win-paint-body {
-	display: flex;
-	background: #c0c0c0;
-	padding: 4px;
-	gap: 4px;
-}
-
-.win-left-tools {
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-	gap: 2px;
-	width: 56px;
-	align-content: start;
-}
-
-.win-tool {
-	width: 25px;
-	height: 25px;
-	background: #c0c0c0;
-	border: 1px solid;
-	border-color: #fff #404040 #404040 #fff;
-	cursor: pointer;
-	font-size: 13px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	padding: 0;
-}
-
-.win-tool:active,
-.win-tool.active {
-	border-color: #404040 #fff #fff #404040;
-	background: #e0e0e0;
-	box-shadow: inset 1px 1px 0 #808080;
-}
-
-.win-tool-size {
-	grid-column: span 2;
-	margin-top: 8px;
-	font-size: 10px;
-	text-align: center;
-}
-
-.win-tool-size input {
-	width: 100%;
-	accent-color: #5e0090;
-}
-
-.win-canvas-area {
-	border: 2px inset #808080;
-	background: #808080;
-	padding: 3px;
-	flex: 1;
-	overflow: auto;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-
-#drawCanvas {
-	background: white;
-	cursor: crosshair;
-	display: block;
-	max-width: 100%;
-}
-
-.win-color-bar {
-	display: flex;
-	align-items: center;
-	gap: 8px;
-	padding: 4px 6px;
-	background: #c0c0c0;
-	border-top: 1px solid #808080;
-}
-
-.win-color-picker {
-	width: 24px;
-	height: 24px;
-	border: 2px inset #808080;
-	padding: 0;
-	cursor: pointer;
-	background: none;
-}
-
-.win-palette {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 2px;
-}
-
-.win-swatch {
-	width: 14px;
-	height: 14px;
-	border: 1px solid #404040;
-	cursor: pointer;
-	padding: 0;
-}
-
-.win-swatch.active {
-	outline: 2px solid #5e0090;
-	outline-offset: -1px;
-}
-
-.win-statusbar {
-	background: #c0c0c0;
-	border-top: 1px solid #fff;
-	box-shadow: inset 0 1px 0 #808080;
-	padding: 3px 6px;
-	font-size: 11px;
-	color: #333;
-}
-
-/* BARRA DE TAREFAS CLASSICA DO WINDOWS */
-.win-taskbar {
-	position: fixed;
-	bottom: 0;
 	left: 0;
-	width: 100%;
+	right: 0;
 	height: 32px;
 	background: #c0c0c0;
 	border-top: 2px solid #fff;
@@ -751,405 +365,38 @@ tbody td img.guest-img-clickable.clicked {
 	align-items: center;
 	padding: 2px;
 	gap: 6px;
-	z-index: 10000;
+	z-index: 1000;
 }
 
-.win-start-btn {
-	background: #c0c0c0;
-	border: 2px solid;
-	border-color: #fff #404040 #404040 #fff;
-	font-family: "MS Sans Serif", Tahoma, Arial, sans-serif;
-	font-weight: bold;
-	font-size: 12px;
-	padding: 2px 8px;
-	display: flex;
-	align-items: center;
-	gap: 4px;
-	cursor: pointer;
-}
+.win-start-btn { background: #c0c0c0; border: 2px solid; border-color: #fff #404040 #404040 #fff; font-size: 12px; font-weight: bold; padding: 2px 8px; display: flex; align-items: center; gap: 4px; cursor: pointer; }
+.win-start-btn:active { border-color: #404040 #fff #fff #404040; }
+.win-flag { color: #5e0090; }
 
-.win-start-btn:active {
-	border-color: #404040 #fff #fff #404040;
-}
+.win-taskbar-items { display: flex; gap: 4px; flex: 1; overflow-x: auto; }
+.win-taskbar-item { background: #c0c0c0; border: 2px solid; border-color: #fff #404040 #404040 #fff; padding: 1px 8px; font-size: 11px; cursor: pointer; max-width: 120px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.win-taskbar-item.active { border-color: #404040 #fff #fff #404040; background: #e0e0e0; font-weight: bold; }
 
-.win-flag {
-	color: #5e0090;
-}
-
-.win-clock {
-	border: 2px inset #808080;
-	padding: 2px 8px;
-	font-size: 11px;
-	background: #c0c0c0;
-	margin-left: auto;
-}
-
-.win-taskbar-nav {
-	display: flex;
-	gap: 2px;
-}
-
-.hamburger-btn {
-	display: none;
-	background: #c0c0c0;
-	border: 2px solid;
-	border-color: #fff #404040 #404040 #fff;
-	width: 30px;
-	height: 24px;
-	cursor: pointer;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	gap: 3px;
-	padding: 0;
-}
-
-.hamburger-btn:active {
-	border-color: #404040 #fff #fff #404040;
-}
-
-.hamburger-line {
-	display: block;
-	width: 16px;
-	height: 2px;
-	background: #333;
-}
-
-.win-taskbar-link {
-	background: #c0c0c0;
-	border: 1px solid;
-	border-color: #fff #404040 #404040 #fff;
-	padding: 2px 8px;
-	font-size: 11px;
-	color: #000;
-	text-decoration: none;
-	cursor: pointer;
-	font-family: "MS Sans Serif", Tahoma, Arial, sans-serif;
-}
-
-.win-taskbar-link:hover {
-	background: #5e0090;
-	color: white;
-}
-
-.win-taskbar-link:active {
-	border-color: #404040 #fff #fff #404040;
-}
+.win-clock { border: 2px inset #808080; padding: 1px 6px; font-size: 10px; background: #c0c0c0; }
 
 /* MENU INICIAR */
-.start-menu {
-	display: none;
-	position: fixed;
-	bottom: 34px;
-	left: 4px;
-	z-index: 10001;
-	width: 260px;
-	background: #c0c0c0;
-	border: 2px solid #000;
-	box-shadow: inset 1px 1px 0 #fff, inset -1px -1px 0 #707070, 4px 4px 10px rgba(0, 0, 0, 0.5);
-}
+.start-menu { display: none; position: absolute; bottom: 32px; left: 4px; z-index: 2000; width: 240px; background: #c0c0c0; border: 2px solid #000; box-shadow: inset 1px 1px 0 #fff, inset -1px -1px 0 #707070, 4px 4px 10px rgba(0, 0, 0, 0.5); }
+.start-menu.open { display: block; }
+.start-menu-titlebar { background: linear-gradient(90deg, #000080, #1084d0); color: white; font-weight: bold; font-size: 12px; padding: 3px 8px; display: flex; align-items: center; gap: 6px; }
+.start-menu-brand { flex: 1; text-align: right; }
+.start-menu-body { display: flex; gap: 6px; padding: 5px; }
+.start-menu-sidebar { background: linear-gradient(90deg, #5e0090, #9b30ff); width: 52px; display: flex; justify-content: center; align-items: center; padding: 4px; }
+.start-menu-lulu { width: 44px; height: 44px; object-fit: contain; border: 1px solid #fff; background: rgba(255,255,255,0.2); border-radius: 3px; }
+.start-menu-items { flex: 1; }
+.start-menu-item { display: flex; align-items: center; gap: 8px; padding: 4px 8px; cursor: pointer; font-size: 12px; }
+.start-menu-item:hover { background: #5e0090; color: white; }
+.start-menu-icon { font-size: 15px; }
+.start-menu-separator { border-top: 1px solid #808080; border-bottom: 1px solid #fff; margin: 3px 0; }
 
-.start-menu-titlebar {
-	background: linear-gradient(90deg, #000080, #1084d0);
-	color: white;
-	font-weight: bold;
-	font-size: 13px;
-	padding: 3px 8px;
-	display: flex;
-	align-items: center;
-	gap: 6px;
-}
-
-.start-menu-brand {
-	flex: 1;
-	text-align: right;
-	font-family: "MS Sans Serif", Tahoma, Arial, sans-serif;
-}
-
-.start-menu-body {
-	display: flex;
-	gap: 6px;
-	padding: 6px;
-}
-
-.start-menu-sidebar {
-	background: linear-gradient(90deg, #5e0090, #9b30ff);
-	color: white;
-	width: 40px;
-	display: flex;
-	flex-direction: column;
-	justify-content: flex-end;
-	padding: 4px;
-	font-size: 10px;
-	text-align: center;
-}
-
-.start-menu-items {
-	flex: 1;
-}
-
-.start-menu-item {
-	display: flex;
-	align-items: center;
-	gap: 8px;
-	padding: 5px 8px;
-	cursor: pointer;
-	font-size: 12px;
-	font-family: "MS Sans Serif", Tahoma, Arial, sans-serif;
-}
-
-.start-menu-item:hover {
-	background: #5e0090;
-	color: white;
-}
-
-.start-menu-icon {
-	font-size: 16px;
-}
-
-.start-menu-separator {
-	border-top: 1px solid #808080;
-	border-bottom: 1px solid #fff;
-	margin: 4px 0;
-}
-
-.nav-bar {
-	display: none;
-}
-
-/* Responsive para tablets e celulares */
-@media (max-width: 800px) {
-	body {
-		padding: 10px 8px 70px 8px;
-	}
-
-	.main-container {
-		gap: 18px;
-	}
-
-	.naquelepike {
-		font-size: 1.6rem;
-	}
-
-	.title-date {
-		font-size: 1.3rem;
-	}
-
-	.content-block img {
-		width: 100% !important;
-	}
-
-	.map-container {
-		height: 250px;
-	}
-
-	.win-statusbar {
-		font-size: 9px;
-	}
-}
-
-/* Fundo específico para dispositivos móveis */
-@media (pointer: coarse), (max-width: 768px) {
-	body {
-		background-image: url('imagens/fundo-mobile.jpg');
-		background-repeat: no-repeat;
-		background-attachment: fixed;
-		background-position: center center;
-		background-size: cover;
-		background-color: #3a2b0f;
-	}
-}
-
-@media (max-width: 650px) {
-	.retro-player {
-		position: static;
-		width: 100%;
-		margin-bottom: 20px;
-	}
-
-	.win-paint-body {
-		flex-direction: column;
-	}
-
-	.win-left-tools {
-		width: 100%;
-		grid-template-columns: repeat(5, 1fr);
-	}
-
-	/* Taskbar responsiva - menu hamburguer */
-	.win-taskbar {
-		height: auto;
-		min-height: 40px;
-		flex-wrap: wrap;
-		padding: 4px;
-		gap: 4px;
-		align-items: center;
-	}
-
-	.hamburger-btn {
-		display: flex;
-		margin-left: 2px;
-	}
-
-	.win-taskbar-nav {
-		flex-direction: column;
-		width: 100%;
-		order: 3;
-		flex: none;
-		gap: 3px;
-		padding: 4px 0;
-		border-top: 1px solid #808080;
-		margin-top: 2px;
-		display: none;
-	}
-
-	.win-taskbar-nav.open {
-		display: flex;
-		max-height: 60vh;
-		overflow-y: auto;
-	}
-
-	.win-taskbar-nav .win-taskbar-link {
-		font-size: 12px;
-		padding: 6px 10px;
-		width: 100%;
-		text-align: left;
-		border: 1px solid;
-		border-color: #fff #404040 #404040 #fff;
-	}
-
-	.win-start-btn {
-		font-size: 10px;
-		padding: 2px 6px;
-	}
-
-	.win-clock {
-		margin-left: auto;
-		font-size: 9px;
-	}
-
-	/* Menu Iniciar responsivo */
-	.start-menu {
-		width: 220px;
-	}
-
-	.start-menu-sidebar {
-		width: 30px;
-		font-size: 8px;
-	}
-
-	/* Conteúdo das janelas */
-	.win-body-content {
-		padding: 12px;
-	}
-
-	.info-section-win {
-		padding: 10px;
-	}
-
-	.info-section-win h2,
-	.section-h2 {
-		font-size: 1rem;
-	}
-
-	/* Tabela de convidados */
-	.table-wrapper {
-		overflow-x: auto;
-		-webkit-overflow-scrolling: touch;
-	}
-
-	table {
-		min-width: 480px;
-	}
-
-	tbody td img {
-		width: 40px;
-		height: 40px;
-	}
-
-	.guest-search-box {
-		flex-direction: column;
-		align-items: stretch;
-	}
-
-	#guestSearch {
-		min-width: 0;
-	}
-
-	#guestSearchCount {
-		text-align: center;
-	}
-
-	/* Player de música */
-	.retro-player {
-		width: 100%;
-	}
-
-	.album-cover-box {
-		width: 90px;
-		height: 90px;
-	}
-
-	/* Mensagens */
-	#messageForm,
-	#messageBoard {
-		max-width: 100%;
-	}
-
-	/* Canvas de desenho */
-	.win-canvas-area {
-		max-height: 300px;
-	}
-
-	#drawCanvas {
-		max-width: 100%;
-		height: 260px;
-		width: auto;
-	}
-
-	/* Botões menores */
-	.win-btn {
-		width: 14px;
-		height: 12px;
-	}
-
-	.win-titlebar-left {
-		font-size: 11px;
-	}
-}
-
-@media (max-width: 420px) {
-	.naquelepike {
-		font-size: 1.3rem;
-	}
-
-	.title-date {
-		font-size: 1.1rem;
-	}
-
-	.intro-text {
-		font-size: 0.9rem;
-	}
-
-	.hero-gif img {
-		max-height: 240px;
-	}
-
-	.win-left-tools {
-		grid-template-columns: repeat(5, 1fr);
-	}
-
-	.win-tool {
-		width: 22px;
-		height: 22px;
-		font-size: 11px;
-	}
-
-	.win-color-bar {
-		flex-wrap: wrap;
-	}
-
-	.win-taskbar-link {
-		font-size: 9px;
-	}
+/* Responsivo mobile */
+@media (max-width: 768px) {
+	body { background-image: url('imagens/fundo-mobile.jpg'); background-size: cover; }
+	.win-window { width: 92vw !important; left: 4vw !important; right: auto !important; top: 40px !important; min-width: 0; }
+	.desktop-icons { gap: 10px; }
+	.desktop-shortcut { width: 66px; }
+	.shortcut-icon { font-size: 26px; }
 }
