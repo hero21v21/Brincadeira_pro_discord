@@ -733,24 +733,48 @@
 (function() {
 	var overlay = document.getElementById('bootOverlay');
 	var video = document.getElementById('bootVideo');
+	var bootClick = document.getElementById('bootClick');
 	if (!overlay || !video) return;
+
+	var started = false;
+	var endedOnce = false;
 
 	function hideBoot() {
 		overlay.classList.add('hidden');
+		video.pause();
 	}
 
-	// Esconde ao terminar o vídeo
-	video.addEventListener('ended', hideBoot);
+	function startWithSound() {
+		started = true;
+		video.muted = false;
+		video.loop = false;
+		video.currentTime = 0;
+		video.play().catch(function() {
+			// Se ainda não der play com som, mantém o botão
+		});
+		if (bootClick) bootClick.style.display = 'none';
+	}
 
-	// Esconde ao clicar (pular a intro)
-	overlay.addEventListener('click', function() {
+	// Começa mudo como intro visual até o usuario clicar
+	video.muted = true;
+
+	// Botão/clique libera o som
+	if (bootClick) {
+		bootClick.addEventListener('click', function(e) {
+			e.stopPropagation();
+			startWithSound();
+		});
+	}
+	overlay.addEventListener('click', startWithSound);
+
+	// Quando o vídeo terminar (após startWithSound), esconde
+	video.addEventListener('ended', function() {
+		if (started) endedOnce = true;
 		hideBoot();
 	});
 
-	// Fallback: esconde após X segundos caso o vídeo não dispare 'ended'
-	var safeTimeout = setTimeout(hideBoot, 15000);
-
-	// Garante que a intro funcione e, ao terminar, limpa o timeout
+	// Fallback: esconde após um tempo razoável mesmo assim
+	var safeTimeout = setTimeout(hideBoot, 20000);
 	video.addEventListener('playing', function() {
 		clearTimeout(safeTimeout);
 	});

@@ -414,6 +414,26 @@ tbody td img.guest-img-clickable { cursor: pointer; }
 	background: #000;
 }
 
+.boot-click {
+	position: absolute;
+	bottom: 30px;
+	left: 50%;
+	transform: translateX(-50%);
+	background: #000080;
+	color: #fff;
+	border: 2px solid #fff;
+	padding: 10px 26px;
+	font-family: "MS Sans Serif", Tahoma, Arial, sans-serif;
+	font-size: 15px;
+	font-weight: bold;
+	cursor: pointer;
+	box-shadow: 3px 3px 0 #000;
+}
+
+.boot-click:hover {
+	background: #1084d0;
+}
+
 .boot-overlay.hidden {
 	opacity: 0;
 	visibility: hidden;
