@@ -55,6 +55,13 @@ body {
 	text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
 }
 
+.shortcut-img {
+	width: 36px;
+	height: 36px;
+	object-fit: contain;
+	position: relative;
+}
+
 .shortcut-label {
 	font-size: 11px;
 	color: #fff;

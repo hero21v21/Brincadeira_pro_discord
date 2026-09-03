@@ -115,6 +115,16 @@
 		});
 	});
 
+	// Atalhos externos (ex.: abrir portfólio)
+	document.querySelectorAll('.desktop-shortcut[data-external]').forEach(function(el) {
+		el.addEventListener('click', function() {
+			var url = this.getAttribute('data-external');
+			if (url) {
+				window.open(url, '_blank');
+			}
+		});
+	});
+
 	// Botões fechar/minimizar
 	windows.forEach(function(win) {
 		var closeBtn = win.querySelector('.btn-close');
