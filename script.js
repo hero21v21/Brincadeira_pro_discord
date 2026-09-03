@@ -199,43 +199,50 @@
 			artist: "The Long Faces",
 			title: "Jane!",
 			cover: "https://i.scdn.co/image/ab67616d0000b2736685599bd4bafe725e532e2f",
-			src: "musicas/jane.mp3"
+			src: "musicas/jane.mp3",
+			spotifyUrl: "https://open.spotify.com/search/Jane%20The%20Long%20Faces"
 		},
 		{
 			artist: "Laufey",
 			title: "From the Start",
 			cover: "https://i.scdn.co/image/ab6761610000e5ebc751deb23ed62e7cadfb669a",
-			src: "musicas/from-the-start.mp3"
+			src: "musicas/from-the-start.mp3",
+			spotifyUrl: "https://open.spotify.com/search/From%20the%20Start%20Laufey"
 		},
 		{
 			artist: "Laufey",
 			title: "Promise",
 			cover: "https://images.genius.com/a4a62b88f0717a4eb2d7201eb05f4b33.300x300x1.png",
-			src: "musicas/promise.mp3"
+			src: "musicas/promise.mp3",
+			spotifyUrl: "https://open.spotify.com/search/Promise%20Laufey"
 		},
 		{
 			artist: "Jão",
 			title: "Idiota",
 			cover: "https://i.scdn.co/image/ab67616d0000b27376086200d394250d6eef8adf",
-			src: "musicas/idiota.mp3"
+			src: "musicas/idiota.mp3",
+			spotifyUrl: "https://open.spotify.com/search/Idiota%20Jao"
 		},
 		{
 			artist: "Jão",
 			title: "Aurora",
 			cover: "https://akamai.sscdn.co/uploadfile/letras/albuns/3/b/7/4/5057081785149299.jpg",
-			src: "musicas/aurora.mp3"
+			src: "musicas/aurora.mp3",
+			spotifyUrl: "https://open.spotify.com/search/Aurora%20Jao"
 		},
 		{
 			artist: "2ZDinizz",
 			title: "Pensando em Mim",
 			cover: "https://i.scdn.co/image/ab67616d0000b273800ebc6f7b457f363809be8e",
-			src: "musicas/pensando-em-mim.mp3"
+			src: "musicas/pensando-em-mim.mp3",
+			spotifyUrl: "https://open.spotify.com/search/Pensando%20em%20Mim"
 		},
 		{
 			artist: "Cafuné",
 			title: "Tek It",
 			cover: "https://cdn-images.dzcdn.net/images/cover/6414570db8287addf610c8ab5aad638b/0x1900-000000-80-0-0.jpg",
-			src: "musicas/tek-it.mp3"
+			src: "musicas/tek-it.mp3",
+			spotifyUrl: "https://open.spotify.com/search/Tek%20It%20Cafune"
 		}
 	];
 
@@ -411,6 +418,14 @@
 	if (volDown) volDown.addEventListener('click', function() {
 		audio.volume = Math.max(0, audio.volume - 0.1);
 		if (volFill) volFill.style.height = (audio.volume * 100) + "%";
+	});
+
+	// Ao clicar na capa, abre o Spotify da música atual
+	if (imgCover) imgCover.addEventListener('click', function() {
+		var track = playlist[currentIndex];
+		if (track && track.spotifyUrl) {
+			window.open(track.spotifyUrl, '_blank');
+		}
 	});
 
 	populateSelects();
@@ -787,5 +802,28 @@
 	var safeTimeout = setTimeout(hideBoot, 20000);
 	video.addEventListener('playing', function() {
 		clearTimeout(safeTimeout);
+	});
+})();
+
+// SOM DE CLIQUE DO MOUSE
+(function() {
+	var clickAudio = new Audio('mouse-click.mp3');
+	clickAudio.preload = 'auto';
+	clickAudio.volume = 0.8;
+	var lastClick = 0;
+
+	document.addEventListener('click', function(e) {
+		// Não toca ao clicar em elementos do boot (para não soar estranho)
+		if (e.target && e.target.closest && e.target.closest('#bootOverlay')) return;
+
+		var now = Date.now();
+		// Evita reprodução sobreposta excessiva
+		if (now - lastClick < 50) return;
+		lastClick = now;
+
+		clickAudio.currentTime = 0;
+		clickAudio.play().catch(function() {
+			// ignora se não puder tocar ainda
+		});
 	});
 })();

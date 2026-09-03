@@ -1,6 +1,6 @@
 # Festa de Aniversario
 
-Site estatico da festa de aniversario.
+Site ilustrativo e estatico de uma festa de aniversario ficticia.
 
 ## Publicacao
 
