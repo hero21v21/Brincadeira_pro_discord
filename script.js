@@ -146,6 +146,7 @@
 			titlebar.addEventListener('mousedown', function(e) {
 				if (e.target.closest('.win-btn')) return;
 				isDragging = true;
+				window.__dragging = true;
 				var rect = win.getBoundingClientRect();
 				offsetX = e.clientX - rect.left;
 				offsetY = e.clientY - rect.top;
@@ -158,6 +159,7 @@
 			});
 			document.addEventListener('mouseup', function() {
 				isDragging = false;
+				window.__dragging = false;
 			});
 		}
 	});
@@ -813,8 +815,17 @@
 	var lastClick = 0;
 
 	document.addEventListener('click', function(e) {
-		// Não toca ao clicar em elementos do boot (para não soar estranho)
+		// Não toca ao clicar em elementos do boot
 		if (e.target && e.target.closest && e.target.closest('#bootOverlay')) return;
+
+		// Não toca dentro da janela do Paint da Festa
+		if (e.target && e.target.closest && e.target.closest('#jogos')) return;
+
+		// Não toca ao arrastar uma janela
+		if (window.__dragging) {
+			window.__dragging = false;
+			return;
+		}
 
 		var now = Date.now();
 		// Evita reprodução sobreposta excessiva
