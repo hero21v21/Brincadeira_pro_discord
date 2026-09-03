@@ -72,6 +72,9 @@
 		refreshTaskbar();
 	}
 
+	// Expõe globalmente para outros scripts abrirem janelas
+	window.openAppWindow = openWindow;
+
 	function closeWindow(win) {
 		win.style.display = 'none';
 		win.classList.add('window-closed');
@@ -694,39 +697,36 @@
 	});
 })();
 
-// GIF + ÁUDIO DO LINDOLFO
+// GIF + VÍDEO DO LINDOLFO (sem áudio antigo)
 (function() {
 	var img = document.getElementById('lindolfoGif');
 	if (!img) return;
 
 	var originalSrc = img.getAttribute('src');
 	var gifSrc = 'https://media.tenor.com/CgNrHQMSwOIAAAAM/green-alien-cat.gif';
-	var audio = new Audio('musicas/lindolfo.mp3');
-	var active = false;
 
 	function stopGif() {
-		active = false;
 		img.src = originalSrc;
 		img.classList.remove('gif-playing');
-		audio.pause();
-		audio.currentTime = 0;
 	}
 
 	img.addEventListener('click', function() {
-		if (active) {
-			stopGif();
-			return;
+		// Abre o player de vídeo do administrador
+		if (typeof window.openAppWindow === 'function') {
+			window.openAppWindow('win-admin');
 		}
-		active = true;
+		var adminVideo = document.getElementById('adminVideo');
+		if (adminVideo && typeof adminVideo.play === 'function') {
+			adminVideo.currentTime = 0;
+			adminVideo.play().catch(function() {});
+		}
+
 		img.src = gifSrc;
 		img.classList.add('gif-playing');
-		audio.currentTime = 0;
-		audio.play().catch(function() {
-			setTimeout(stopGif, 4000);
-		});
+		// Volta ao normal após um tempo (fallback caso o vídeo não dispare)
+		if (this._gifTimer) clearTimeout(this._gifTimer);
+		this._gifTimer = setTimeout(stopGif, 6000);
 	});
-
-	audio.addEventListener('ended', stopGif);
 })();
 
 // TELA DE BOOT (INTRO WINDOWS XP)
