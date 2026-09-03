@@ -47,7 +47,7 @@ O projeto publica automaticamente no **GitHub Pages** a cada `push` na branch `m
    git push origin main
    ```
 2. O workflow publica o site automaticamente.
-3. Acesse: `https://SEU_USUARIO.github.io/Brincadeira_pro_discord/`
+3. Acesse: `https://Vickthor1.github.io/Brincadeira_pro_discord/`
 
 > Para ativar: repositório → *Settings → Pages → Source: GitHub Actions*.
 
