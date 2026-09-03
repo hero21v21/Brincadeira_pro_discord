@@ -5,11 +5,18 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Festa de Aniversário - Windows 98</title>
 	<link href="https://db.onlinewebfonts.com/c/93d7baba8bc3982ba534b49422f7aaa7?family=Vampire+Wars" rel="stylesheet" type="text/css"/>
-	<link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/512/565/565415.png" type="image/x-icon"/>
+	<link rel="shortcut icon" href="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/7da8855e-55d1-4cd3-ba5b-f8f32c4cdc1d/df6buiy-255b04ab-7506-4ac5-83f7-b15759b84152.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi83ZGE4ODU1ZS01NWQxLTRjZDMtYmE1Yi1mOGYzMmM0Y2RjMWQvZGY2YnVpeS0yNTViMDRhYi03NTA2LTRhYzUtODNmNy1iMTU3NTliODQxNTIucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.KhccrrFRvTaPBK8txfiGqAxm_OWREeJtnoZIQOkPJjs" type="image/x-icon"/>
 	<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+	<!-- TELA DE BOOT DO WINDOWS (intro) -->
+	<div class="boot-overlay" id="bootOverlay">
+		<video id="bootVideo" autoplay muted playsinline>
+			<source src="boot.mp4" type="video/mp4">
+		</video>
+	</div>
+
 	<!-- DESKTOP COM ÍCONES -->
 	<div class="desktop" id="desktop">
 		<div class="desktop-icons">
@@ -192,12 +199,6 @@
 								<td>Pai de família</td>
 							</tr>
 							<tr>
-								<td><img src="https://i.ytimg.com/vi/eTWCGz3uFUI/hqdefault.jpg"></td>
-								<td>Beatriz</td>
-								<td>126 anos</td>
-								<td>Jogador de LOL</td>
-							</tr>
-							<tr>
 								<td><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQPVrjmj0esd-H8rqAfB6h30arILEgzBs8WbKsRf0Pv5A&s"></td>
 								<td>João</td>
 								<td>17 anos</td>
@@ -262,6 +263,12 @@
 								<td>Lindolfo</td>
 								<td>1231 anos</td>
 								<td>Jogador profissional de jogos com ritmo</td>
+							</tr>
+							<tr>
+								<td><img src="https://i.pinimg.com/736x/98/c7/7f/98c77f2836b37c199dfdd1bef7b27623.jpg"></td>
+								<td>Beatriz</td>
+								<td>126 anos</td>
+								<td>Ultima romantica</td>
 							</tr>
 							<tr>
 								<td><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOXxSzrtGy-kwVH-sllkljeJioKI8UBRKK0m-4Xou0_w&s"></td>

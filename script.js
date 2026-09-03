@@ -728,3 +728,30 @@
 
 	audio.addEventListener('ended', stopGif);
 })();
+
+// TELA DE BOOT (INTRO WINDOWS XP)
+(function() {
+	var overlay = document.getElementById('bootOverlay');
+	var video = document.getElementById('bootVideo');
+	if (!overlay || !video) return;
+
+	function hideBoot() {
+		overlay.classList.add('hidden');
+	}
+
+	// Esconde ao terminar o vídeo
+	video.addEventListener('ended', hideBoot);
+
+	// Esconde ao clicar (pular a intro)
+	overlay.addEventListener('click', function() {
+		hideBoot();
+	});
+
+	// Fallback: esconde após X segundos caso o vídeo não dispare 'ended'
+	var safeTimeout = setTimeout(hideBoot, 15000);
+
+	// Garante que a intro funcione e, ao terminar, limpa o timeout
+	video.addEventListener('playing', function() {
+		clearTimeout(safeTimeout);
+	});
+})();
