@@ -30,10 +30,16 @@
 		return t ? t.textContent : win.id;
 	}
 
+	function isVisible(win) {
+		if (win.classList.contains('window-closed')) return false;
+		if (win.classList.contains('minimized')) return true;
+		return window.getComputedStyle(win).display !== 'none' && win.style.display !== 'none';
+	}
+
 	function refreshTaskbar() {
 		taskbarItems.innerHTML = '';
 		windows.forEach(function(win) {
-			if (win.style.display !== 'none') {
+			if (isVisible(win)) {
 				var btn = document.createElement('div');
 				btn.className = 'win-taskbar-item';
 				btn.textContent = getTitle(win);
