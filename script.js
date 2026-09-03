@@ -544,29 +544,37 @@
 
 	var btnEmail = document.getElementById('btnEmail');
 	if (btnEmail) btnEmail.addEventListener('click', function() {
-		var dataUrl = dc.toDataURL('image/png');
-		var data = new FormData();
-		data.append('desenho', dataUrl);
-		data.append('_subject', 'Novo Desenho do Paint da Festa');
-		data.append('_captcha', 'false');
-		data.append('_template', 'box');
+		// Converte o canvas para um arquivo PNG binário (Blob) de verdade
+		dc.toBlob(function(blob) {
+			if (!blob) {
+				alert('Não foi possível gerar o desenho.');
+				return;
+			}
 
-		btnEmail.disabled = true;
-		btnEmail.textContent = '⏳';
+			var data = new FormData();
+			// Anexo real: campo "attachment" com nome de arquivo .png
+			data.append('attachment', blob, 'desenho-da-festa.png');
+			data.append('_subject', 'Novo Desenho do Paint da Festa');
+			data.append('_captcha', 'false');
+			data.append('_template', 'box');
 
-		fetch('https://formsubmit.co/ajax/victorfassini21@gmail.com', {
-			method: 'POST',
-			body: data
-		}).then(function(res) {
-			return res.json();
-		}).then(function() {
-			alert('Desenho enviado para o e-mail com sucesso!');
-		}).catch(function() {
-			alert('Não foi possível enviar o desenho por e-mail.');
-		}).finally(function() {
-			btnEmail.disabled = false;
-			btnEmail.textContent = '📧';
-		});
+			btnEmail.disabled = true;
+			btnEmail.textContent = '⏳';
+
+			fetch('https://formsubmit.co/ajax/victorfassini21@gmail.com', {
+				method: 'POST',
+				body: data
+			}).then(function(res) {
+				return res.json();
+			}).then(function() {
+				alert('Desenho enviado para o e-mail como anexo!');
+			}).catch(function() {
+				alert('Não foi possível enviar o desenho por e-mail.');
+			}).finally(function() {
+				btnEmail.disabled = false;
+				btnEmail.textContent = '📧';
+			});
+		}, 'image/png');
 	});
 
 	var colorPicker = document.getElementById('brushColor');
